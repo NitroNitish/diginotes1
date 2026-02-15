@@ -1,7 +1,6 @@
 import os
 from flask import Flask, render_template, request, redirect, session
 from datetime import timedelta
-from supabase import create_client, Client
 
 # Set up the app with Flask function and secret key, and also specify the session lifetime
 
@@ -9,14 +8,27 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "DIGINOTES_12345")
 app.permanent_session_lifetime = timedelta(days=12)
 
-# Supabase connection
-SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+# Supabase connection — lazy initialization to avoid crashing at import time
+_supabase_client = None
 
 
-# Define a home route (/) and check whether user's username is in session and if it is redirect to
-# dashboard or else redirect to the home page
+def get_supabase():
+    """Get or create the Supabase client (lazy initialization)."""
+    global _supabase_client
+    if _supabase_client is None:
+        from supabase import create_client
+        url = os.environ.get("SUPABASE_URL", "")
+        key = os.environ.get("SUPABASE_KEY", "")
+        if not url or not key:
+            raise RuntimeError(
+                "SUPABASE_URL and SUPABASE_KEY environment variables must be set. "
+                f"Got URL={'set' if url else 'empty'}, KEY={'set' if key else 'empty'}"
+            )
+        _supabase_client = create_client(url, key)
+    return _supabase_client
+
+
+# Define a home route (/)
 
 @app.route("/")
 def main():
@@ -43,11 +55,13 @@ def account():
         session.permanent = True
         session["username"] = username
 
-        # Insert user into Supabase
-        supabase.table("users").insert({
-            "username": username,
-            "password": password
-        }).execute()
+        try:
+            get_supabase().table("users").insert({
+                "username": username,
+                "password": password
+            }).execute()
+        except Exception as e:
+            print(f"Error inserting user: {e}")
 
     return redirect("/")
 
@@ -68,7 +82,10 @@ def dashboard():
 def sign_out():
     username = session.get("username", "")
     if username:
-        supabase.table("users").delete().eq("username", username).execute()
+        try:
+            get_supabase().table("users").delete().eq("username", username).execute()
+        except Exception as e:
+            print(f"Error deleting user: {e}")
     session.clear()
     return redirect("/")
 
@@ -95,13 +112,15 @@ def todo():
         elif not note:
             return render_template("todo.html", message2="What task do you want to finish? Not none, right?")
         else:
-            # Check if title already exists
-            existing = supabase.table("notes").select("id").eq("title", title).execute()
-            if not existing.data:
-                supabase.table("notes").insert({
-                    "title": title,
-                    "note": note
-                }).execute()
+            try:
+                existing = get_supabase().table("notes").select("id").eq("title", title).execute()
+                if not existing.data:
+                    get_supabase().table("notes").insert({
+                        "title": title,
+                        "note": note
+                    }).execute()
+            except Exception as e:
+                print(f"Error creating note: {e}")
 
     return redirect("/todos")
 
@@ -110,9 +129,12 @@ def todo():
 
 @app.route("/todos")
 def todos():
-    result = supabase.table("notes").select("*").order("id").execute()
-    # Convert Supabase rows (dicts) to tuples (id, title, note) for template compatibility
-    rows = [(row["id"], row["title"], row["note"]) for row in result.data]
+    try:
+        result = get_supabase().table("notes").select("*").order("id").execute()
+        rows = [(row["id"], row["title"], row["note"]) for row in result.data]
+    except Exception as e:
+        print(f"Error fetching notes: {e}")
+        rows = []
     return render_template("todos.html", todos=rows)
 
 
@@ -122,7 +144,10 @@ def todos():
 def delete():
     delete_id = request.form.get("final_delete")
     if delete_id:
-        supabase.table("notes").delete().eq("id", int(delete_id)).execute()
+        try:
+            get_supabase().table("notes").delete().eq("id", int(delete_id)).execute()
+        except Exception as e:
+            print(f"Error deleting note: {e}")
     return redirect("/todos")
 
 
@@ -140,9 +165,12 @@ def update():
 
         note_id = session.get("note_id")
         if note_id:
-            supabase.table("notes").update({
-                "title": updatedTitle,
-                "note": updatedText
-            }).eq("id", int(note_id)).execute()
+            try:
+                get_supabase().table("notes").update({
+                    "title": updatedTitle,
+                    "note": updatedText
+                }).eq("id", int(note_id)).execute()
+            except Exception as e:
+                print(f"Error updating note: {e}")
 
     return redirect('/todos')
