@@ -1,451 +1,420 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>DigiNotes: Your To-Dos</title>
 
-    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<head>
+  <title>DigiNotes: Your To-Dos</title>
 
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
-    <style>
-      /*Styling for all the elements in the page*/
-       .popup2
-      {
-        visibility: hidden;
-        text-align: center;
-        
-        position: fixed;
-        background-image: linear-gradient(45deg, #003459, blueviolet);
-        color: white;
-        border-radius: 20px;
-        top: 10px;
-        left: 500px;
-        height: 500px;
-        width: 500px;
-      
-        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);       
-      }
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-      .popup2-content
-      {
-        font-weight: bold;
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    /*Styling for all the elements in the page*/
+    .popup2 {
+      visibility: hidden;
+      text-align: center;
 
-      }
-      .section_todo
-      {
-        border: solid;
-        border-width: 1px;
-        border-color: blueviolet;
-        border-top-style: solid;
-        border-top-color: blueviolet;
-        border-top-width: 10px;
+      position: fixed;
+      background-image: linear-gradient(45deg, #003459, blueviolet);
+      color: white;
+      border-radius: 20px;
+      top: 10px;
+      left: 500px;
+      height: 500px;
+      width: 500px;
 
-        position: relative;
-        height: 115px;
-        left: 15px;
-        width: 1300px;
-        cursor: default;
-        transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-        margin-bottom: 30px;
-      }
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .popup2-content {
+      font-weight: bold;
+
+    }
+
+    .section_todo {
+      border: solid;
+      border-width: 1px;
+      border-color: blueviolet;
+      border-top-style: solid;
+      border-top-color: blueviolet;
+      border-top-width: 10px;
+
+      position: relative;
+      height: 115px;
+      left: 15px;
+      width: 1300px;
+      cursor: default;
+      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+      margin-bottom: 30px;
+    }
 
 
-      h2
-      {
-        margin-left: 10px;
-        color: #003459;
-        font-weight: bold;
-        font-size: 23px;
-      }
+    h2 {
+      margin-left: 10px;
+      color: #003459;
+      font-weight: bold;
+      font-size: 23px;
+    }
 
-      h2:hover
-      {
-        text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-      }
+    h2:hover {
+      text-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    }
 
-      .section_todo:hover
-      {
-        transform: scale(1.02);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      }
-      
-      #back
-      {
-        height: 25px;
-        width: 25px;
-      }
+    .section_todo:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 
-      button
-      {
-        font-family: "Inter", sans-serif;
-        font-weight: bold;
-        color: white
-      }
+    #back {
+      height: 25px;
+      width: 25px;
+    }
 
-      button:hover
-      {
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-      }
+    button {
+      font-family: "Inter", sans-serif;
+      font-weight: bold;
+      color: white
+    }
 
-      .delete-btn
-      {
-        background-color: white;
-        border-color: blueviolet;
-        border-width: 3px;
+    button:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
 
-        margin-bottom: 5px;
-        margin-left: 1100px;
-        height: 40px;
-      }
+    .delete-btn {
+      background-color: white;
+      border-color: blueviolet;
+      border-width: 3px;
 
-      .update
-      {
-        background-color: white;
-        border-color: blueviolet;
-        color: blueviolet;
-        border-width: 3px;
-        text-align: right;
+      margin-bottom: 5px;
+      margin-left: 1100px;
+      height: 40px;
+    }
 
-        position: absolute;
-        top: 65px;
-        right: 30px;
-        height: 40px;
-       
-      }
-      .update:hover
-      {
-        background-color: blueviolet;
-        color: white;
-      }
-      #back_button
-      {
-        background-color: blueviolet;
-        height: 33px;
-        width: 80px;   
-      }
+    .update {
+      background-color: white;
+      border-color: blueviolet;
+      color: blueviolet;
+      border-width: 3px;
+      text-align: right;
 
-      #create
-      {
-        height: 45px;
-        font-size: 15px;
-        width: 100px;
-        background-color: blueviolet;
-        position: absolute;
-        left: 1200px;
-        top: 10px;
-      }
+      position: absolute;
+      top: 65px;
+      right: 30px;
+      height: 40px;
 
-      .delete_icon
-      {
-        height: 29px;
-        width: 33px;
-      }
+    }
 
-      #landed
-      {
-        position: absolute;
-        top: 250px;
-        left: 550px;
-        opacity: 0.5;
-        display: none;
-      }
+    .update:hover {
+      background-color: blueviolet;
+      color: white;
+    }
 
-      .popup
-      {
-        visibility: hidden;
-        text-align: center;
-        position: fixed;
-        background-color: #3c649f;
-        color: white;
-        border-radius: 20px;
-        top: 10px;
-        left: 500px;
-        height: 500px;
-        width: 500px;
+    #back_button {
+      background-color: blueviolet;
+      height: 33px;
+      width: 80px;
+    }
 
-        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
-      }
+    #create {
+      height: 45px;
+      font-size: 15px;
+      width: 100px;
+      background-color: blueviolet;
+      position: absolute;
+      left: 1200px;
+      top: 10px;
+    }
 
-      .close
-      {
-        height: 10px;
-        width: 10px;
-        position: fixed;
-        top: 30px;
-        left: 970px;
-      }
+    .delete_icon {
+      height: 29px;
+      width: 33px;
+    }
 
-      .rob_dancing
-      {
-        height: 250px;
-        width: 250px;
-      }
+    #landed {
+      position: absolute;
+      top: 250px;
+      left: 550px;
+      opacity: 0.5;
+      display: none;
+    }
 
-      .description
-      {
-        font-family: "Roboto Serif", sans-serif;
-        color: white;
-        font-weight: bold;
-        font-size: 15px;
-        position: fixed;
-        left: 515px;
-      }
+    .popup {
+      visibility: hidden;
+      text-align: center;
+      position: fixed;
+      background-color: #3c649f;
+      color: white;
+      border-radius: 20px;
+      top: 10px;
+      left: 500px;
+      height: 500px;
+      width: 500px;
 
-      .final_delete
-      {
-        outline: none;
-        font-family: "Roboto Serif", sans-serif;
-        height: 35px;
-        width: 90px;
-        color: black
-      }
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+    }
 
-      .speak
-      {
-        background-color: #deb1fb;
-        height: 30px;
-        width: 50px;
-        position: absolute;
-        right: 230px;
-        top: 70px;
-      }
+    .close {
+      height: 10px;
+      width: 10px;
+      position: fixed;
+      top: 30px;
+      left: 970px;
+    }
 
-      #speak
-      {
-        height: 20px;
-        width: 20px;
-      }
+    .rob_dancing {
+      height: 250px;
+      width: 250px;
+    }
 
-      .note_text
-      {
-        font-size: 18px;
-        color: blueviolet;
-        font-weight: bold;
-        position: absolute;
-        top: 28px;
-        left: 10px;
-        
-      }
+    .description {
+      font-family: "Roboto Serif", sans-serif;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      position: fixed;
+      left: 515px;
+    }
 
-      #rob_thinking
-      {
-        opacity: 0;
-        transition: opacity 1.23s;
-        height: 300px;
-        width: 300px;
-        position: absolute;
-        right: 500px;
-        top: 600px;
-      }
+    .final_delete {
+      outline: none;
+      font-family: "Roboto Serif", sans-serif;
+      height: 35px;
+      width: 90px;
+      color: black
+    }
 
-      .reminder-btn
-      {
-        background-color: white;
-        color: blueviolet;
-        font-family: "Inter", sans-serif;
-        height: 40px;
-        border-width: 3px;
-        border-color: blueviolet;     
-        position: absolute;
-        right: 250px;
-        top: 65px; 
-      }
+    .speak {
+      background-color: #deb1fb;
+      height: 30px;
+      width: 50px;
+      position: absolute;
+      right: 230px;
+      top: 70px;
+    }
 
-      .reminder-btn:hover
-      {
-        background-color: blueviolet;
-        color: white;
-      }
+    #speak {
+      height: 20px;
+      width: 20px;
+    }
 
-      #speech_bubble
-      {
-        opacity: 0;
-        transition: opacity 1.23s;
-        height: 200px;
-        width: 200px;
-        position: absolute;
-        right: 700px;
-        top: 500px;
-      }
+    .note_text {
+      font-size: 18px;
+      color: blueviolet;
+      font-weight: bold;
+      position: absolute;
+      top: 28px;
+      left: 10px;
 
-      #dialogue
-      {
-        opacity: 0;
-        transition: opacity 1.23s;
-        position: absolute;
-        top: 510px;
-        right: 710px;
-        font-family: "Inter", sans-serif;
-        color: blueviolet;
-        font-weight: bold;
-      }
+    }
 
-      .fade_in
-      {
-        opacity: 1;
-      }
+    #rob_thinking {
+      opacity: 0;
+      transition: opacity 1.23s;
+      height: 300px;
+      width: 300px;
+      position: absolute;
+      right: 500px;
+      top: 600px;
+    }
 
-      #mascot2
-      {
-        height: 300px;
-        width: 300px;
-      }
+    .reminder-btn {
+      background-color: white;
+      color: blueviolet;
+      font-family: "Inter", sans-serif;
+      height: 40px;
+      border-width: 3px;
+      border-color: blueviolet;
+      position: absolute;
+      right: 250px;
+      top: 65px;
+    }
 
-      #prompt
-      {
-        position: fixed;
-        top: 30px;
-        left: 550px;
-      }
-     
-      #encourage
-      {
-        font-weight: bold;
-        font-size: 20px;
-      }
+    .reminder-btn:hover {
+      background-color: blueviolet;
+      color: white;
+    }
 
-      
-      .underline-animation
-      {
-        position: relative;
-        display: inline-block;
-      }
+    #speech_bubble {
+      opacity: 0;
+      transition: opacity 1.23s;
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      right: 700px;
+      top: 500px;
+    }
 
-      .underline-animation::after
-      {
-        content: '';
-        position: absolute;
-        left: 0px;
-        bottom: -10px;
-        width: 0;
-        height: 5px;
-        background-color: aqua;
-        transition: width 0.3s ease-in-out;
-      }
+    #dialogue {
+      opacity: 0;
+      transition: opacity 1.23s;
+      position: absolute;
+      top: 510px;
+      right: 710px;
+      font-family: "Inter", sans-serif;
+      color: blueviolet;
+      font-weight: bold;
+    }
 
-      #confirm
-      {
-        background-color: white;
-        color: #003459;
-        height: 40px;
-        position: fixed; 
-        top: 460px;
-        left: 710px;
-      }
+    .fade_in {
+      opacity: 1;
+    }
 
-      .focus_tag
-      {
-        background-color: #D6B4FC;
-        color: blueviolet;
-        font-weight: bold;
-        position: absolute;
-        left: 850px;
-        top: 75px;
-        border-width: 1px;
-        visibility: hidden;
-      }
+    #mascot2 {
+      height: 300px;
+      width: 300px;
+    }
 
-      .cross_popup
-      {
-        height: 10px;
-        width: 10px;
-        position: fixed;
-        left: 970px;
-        top: 30px;
-      }
-    </style>
-  </head>
-  <body>
-    <!--Back icon-->
-    <button onclick="get_back();" id="back_button">
-      <img id="back" src="static/back_icon.png">
+    #prompt {
+      position: fixed;
+      top: 30px;
+      left: 550px;
+    }
+
+    #encourage {
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+
+    .underline-animation {
+      position: relative;
+      display: inline-block;
+    }
+
+    .underline-animation::after {
+      content: '';
+      position: absolute;
+      left: 0px;
+      bottom: -10px;
+      width: 0;
+      height: 5px;
+      background-color: aqua;
+      transition: width 0.3s ease-in-out;
+    }
+
+    #confirm {
+      background-color: white;
+      color: #003459;
+      height: 40px;
+      position: fixed;
+      top: 460px;
+      left: 710px;
+    }
+
+    .focus_tag {
+      background-color: #D6B4FC;
+      color: blueviolet;
+      font-weight: bold;
+      position: absolute;
+      left: 850px;
+      top: 75px;
+      border-width: 1px;
+      visibility: hidden;
+    }
+
+    .cross_popup {
+      height: 10px;
+      width: 10px;
+      position: fixed;
+      left: 970px;
+      top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <!--Back icon-->
+  <button onclick="get_back();" id="back_button">
+    <img id="back" src="{{ url_for('static', filename='back_icon.png') }}">
+  </button>
+
+  <!--Create todo button-->
+  <button onclick="create_todo();" id="create">
+    Create a To-Do List
+  </button>
+
+  <br>
+  <br>
+  <br>
+
+  <!-- Loop through todos and present the data in cards-->
+  {% if not todos %}
+  <p id="landed" style="display: initial;">No to-dos yet! Why not add a task to finish today?</p>
+
+  {% else %}
+  {% for todo in todos %}
+  <div class="section_todo" data-id="{{todo[0]}}">
+    <h2 class="title_todo">{{todo[1]}}</h2>
+
+
+    <form action="/update" method="get">
+      <button class="update" value="{{todo[0]}}" name="update" type="submit">Update</button>
+    </form>
+
+    <h6 class="note_text">{{todo[2]}}</h6>
+
+    <button type="button" class="reminder-btn" data-id="{{todo[0]}}">Set Reminder</button>
+
+    <button type="button" class="delete-btn" data-id="{{todo[0]}}">
+      <img class="delete_icon" src="{{ url_for('static', filename='delete.png') }}">
     </button>
 
-    <!--Create todo button-->
-    <button onclick="create_todo();" id="create">
-      Create a To-Do List
-    </button>
+    <button type="button" id="focus_tag" class="focus_tag">In Focus</button>
 
-    <br>
-    <br>
-    <br>
 
-    <!-- Loop through todos and present the data in cards-->
-    {% if not todos %}
-    <p id="landed" style="display: initial;">No to-dos yet! Why not add a task to finish today?</p>
+  </div>
 
-    {% else %}
-    {% for todo in todos %}
-    <div class="section_todo" data-id="{{todo[0]}}">
-      <h2 class="title_todo">{{todo[1]}}</h2>
-      
 
-      <form action="/update" method="get">
-        <button class="update" value="{{todo[0]}}" name="update" type="submit">Update</button>
+
+  {% endfor %}
+  {% endif %}
+
+  <!--Popup for Rob when the Delete button is clicked-->
+  <div class="popup">
+    <div class="popup-content">
+      <h1>Hurray! Rob is happy!</h1>
+      <img class="close" src="{{ url_for('static', filename='cross.png') }}">
+      <img class="rob_dancing" src="{{ url_for('static', filename='Rob.png') }}">
+      <br>
+      <p class="description">"Every time you delete a todo or note, I become a DJ out of <br> joy!"</p>
+      <br>
+      <br>
+      <br>
+      <br>
+      <form action="/delete" method="post">
+        <input type="hidden" id="delete_id" name="final_delete">
+        <button type="submit" class="final_delete">Delete</button>
       </form>
-      
-      <h6 class="note_text">{{todo[2]}}</h6>
-
-      <button type="button" class="reminder-btn" data-id="{{todo[0]}}">Set Reminder</button>
-
-      <button type="button" class="delete-btn" data-id="{{todo[0]}}">
-      <img class="delete_icon" src="static/delete.png">
-       </button>
-
-      <button type="button" id="focus_tag" class="focus_tag">In Focus</button>
-   
-      
-    </div>
-
-    
-    
-    {% endfor %}
-    {% endif %}
-
-    <!--Popup for Rob when the Delete button is clicked-->
-    <div class="popup">
-      <div class="popup-content">
-        <h1>Hurray! Rob is happy!</h1>
-        <img class="close" src="static/cross.png">
-        <img class="rob_dancing" src="static/Rob.png">
-        <br>
-        <p class="description">"Every time you delete a todo or note, I become a DJ out of <br> joy!"</p>
-        <br>
-        <br>
-        <br>
-        <br>
-        <form action="/delete" method="post">
-          <input type="hidden" id="delete_id" name="final_delete">
-           <button type="submit" class="final_delete" name="final_delete">Delete</button>
-        </form>
     </div>
 
     <!--Popup when the Set Reminder Button is clicked-->
     <div class="popup2">
       <div class="popup2-content">
-        <img class="cross_popup" id="cross_popup" src="static/cross.png">
-         <h3 id="prompt">Tick-tock! You've set a reminder tag on your task!</h3>
-         <br>
-         <br>
-         <br>
-         <img src="static/Stylie_and_Rob_looking_at_watch.png" id="mascot2">
-         <br>
-         
-         <p id="encourage">Great choice! This will help you finish your tasks faster!</p>
-         
-         <button id="confirm">Confirm Tag</button>
-      
-         <input type="hidden" id="reminderId" name="reminderId">
-        </div>
+        <img class="cross_popup" id="cross_popup" src="{{ url_for('static', filename='cross.png') }}">
+        <h3 id="prompt">Tick-tock! You've set a reminder tag on your task!</h3>
+        <br>
+        <br>
+        <br>
+        <img src="{{ url_for('static', filename='Stylie_and_Rob_looking_at_watch.png') }}" id="mascot2">
+        <br>
+
+        <p id="encourage">Great choice! This will help you finish your tasks faster!</p>
+
+        <button id="confirm">Confirm Tag</button>
+
+        <input type="hidden" id="reminderId" name="reminderId">
+      </div>
     </div>
     <br>
     <br>
     <br>
-    <img id="rob_thinking" src="static/Rob_thinking.png">
+    <img id="rob_thinking" src="{{ url_for('static', filename='Rob_thinking.png') }}">
     <br>
     <br>
-    <img id="speech_bubble" src="static/speech_bubble.png">
+    <img id="speech_bubble" src="{{ url_for('static', filename='speech_bubble.png') }}">
     <p id="dialogue">Why don't <br> you create small <br> tasks so that you <br> can complete them <br> better?</p>
 
     <script>
@@ -459,7 +428,7 @@
       const deleteInput = document.getElementById('delete_id');
 
       const focus_tags = document.querySelectorAll('.focus_tag');
-    
+
       const updates = document.querySelectorAll('.update');
 
       const rob_mascot = document.getElementById('rob_thinking');
@@ -467,80 +436,76 @@
       const bubble = document.getElementById('speech_bubble');
 
       const reminder_btns = document.querySelectorAll('.reminder-btn');
-      
+
       const reminder_popup = document.querySelector('.popup2');
-      const reminder_id = document.getElementById('reminderId'); 
+      const reminder_id = document.getElementById('reminderId');
       const confirm_button = document.getElementById('confirm');
 
       // Dashboard redirect code block
-      function get_back()
-      {
-        window.location.href="/dashboard";
-      
+      function get_back() {
+        window.location.href = "/dashboard";
+
       }
 
       // Todo redirect code block when the Create Todo button on the top right is clicked
-      function create_todo()
-      {
+      function create_todo() {
         window.location.href = "/todo";
       }
 
-      
 
-      function change_page()
-      {
-        window.location.href="/todo";
-       
+
+      function change_page() {
+        window.location.href = "/todo";
+
       }
 
-      document.querySelector('.close').addEventListener('click', function(){
+      document.querySelector('.close').addEventListener('click', function () {
         popup.style.visibility = "hidden";
       });
 
-      document.querySelector('.cross_popup').addEventListener('click', function(){
+      document.querySelector('.cross_popup').addEventListener('click', function () {
         reminder_popup.style.visibility = "hidden";
       });
 
       reminder_btns.forEach((rem) => {
-      rem.addEventListener('click', function (){
-        const id = this.dataset.id;
-        reminder_id.value = id;
+        rem.addEventListener('click', function () {
+          const id = this.dataset.id;
+          reminder_id.value = id;
 
-        const bgm = new Audio("{{url_for('static', filename='audio/alarm_beep.mp3')}}");
-        bgm.play();
-        reminder_popup.style.visibility = "visible";
+          const bgm = new Audio("{{url_for('static', filename='audio/alarm_beep.mp3')}}");
+          bgm.play();
+          reminder_popup.style.visibility = "visible";
+        });
       });
-    });
 
-      delete_popups.forEach((btn ) => {
-        btn.addEventListener('click', function (){
+      delete_popups.forEach((btn) => {
+        btn.addEventListener('click', function () {
           const music = new Audio("{{url_for('static', filename='audio/marimba.mp3')}}");
           music.play();
 
-          const id= this.dataset.id;
+          const id = this.dataset.id;
           deleteInput.value = id;
           popup.style.visibility = "visible";
         });
       });
 
-      confirm_button.addEventListener('click', function(){
+      confirm_button.addEventListener('click', function () {
         const card_element = document.querySelector(`[data-id = "${reminder_id.value}"]`);
-        if (card_element)
-        {
+        if (card_element) {
           focus_tag = card_element.querySelector('.focus_tag');
-          if (focus_tag)
-        {
-          focus_tag.style.visibility = "visible";
-        }
+          if (focus_tag) {
+            focus_tag.style.visibility = "visible";
+          }
 
-        focus_tag.addEventListener('click', function(){
-          focus_tag.style.visibility = "hidden";
-        });
+          focus_tag.addEventListener('click', function () {
+            focus_tag.style.visibility = "hidden";
+          });
         }
       });
-      
-      
-      
+
+
+
     </script>
-  </body>
+</body>
+
 </html>

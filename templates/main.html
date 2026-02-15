@@ -3,7 +3,7 @@
   <head>
     <title>DigiNotes: Home</title>
 
-    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
    <link rel="preconnect" href="https://fonts.googleapis.com">
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,7 +112,7 @@
   <body>
     <!--Navbar at the top -->
     <div id="navbar">
-      <img id="logo" src="static/logo.png">
+      <img id="logo" src="{{ url_for('static', filename='logo.png') }}">
       <a id="about" href="about.html">About</a>
       <a id="tour" href="tour.html">Tour</a>
       <p>DIGINotes</p>
@@ -121,7 +121,7 @@
     <br>
     <!--Hero section code-->
     <div id="hero" class="fade-out">
-      <img id="stylie_and_rob" src="static/Stylie_and_Rob.png">
+      <img id="stylie_and_rob" src="{{ url_for('static', filename='Stylie_and_Rob.png') }}">
 
       <br>
       <br>
@@ -134,15 +134,9 @@
     <button onclick="change_page();">Get Started</button>
 
     <script>
-      let button = document.getElementsByTagName('button')[0];
-      
-
-      // Code block for the Get Started button, which should lead to the Sign Out page
       function change_page()
       {
-        button.addEventListener('click', function (){
-          window.location.href="/account";
-        });
+        window.location.href="/account";
       }
     </script>
   </body>

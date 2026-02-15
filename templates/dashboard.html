@@ -1,236 +1,224 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>DigiNotes: Dashboard</title>
 
-    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<head>
+  <title>DigiNotes: Dashboard</title>
 
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
-    <style>
-      /*Base styling for the a tags*/
-      a
-      {
-        font-family: "Inter", sans-serif;
-        color: white;
-        font-weight: bold;
-        font-size: 20px;
-        text-decoration: none;
-      }
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-      /*Body styling*/
-      body
-      {
-        padding-bottom: 50px;
-      }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    /*Base styling for the a tags*/
+    a {
+      font-family: "Inter", sans-serif;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+      text-decoration: none;
+    }
 
-      /*Add todo button styling*/
-      #add_todo
-      {
-        height: 40px;
-        width: 150px;
-        position: absolute;
-        top: 350px;
-        left: 700px;
-        background-color: white;
-        color: #003459;
-        font-weight: bold;
-        font-size: 16px;
-      }
+    /*Body styling*/
+    body {
+      padding-bottom: 50px;
+    }
 
-      /*Styling when the add-todo button is hovered upon*/
-      #add_todo:hover
-      {
-        background-color: #003459;
-        color: white;
-        font-weight: bold;
-        box-shadow: 5px 5px 5px 5px lightgray;
-      }
-      
+    /*Add todo button styling*/
+    #add_todo {
+      height: 40px;
+      width: 150px;
+      position: absolute;
+      top: 350px;
+      left: 700px;
+      background-color: white;
+      color: #003459;
+      font-weight: bold;
+      font-size: 16px;
+    }
 
-      /*Styling for the close icon in the todo popup*/
-      #cross-todo
-      {
-        height: 10px;
-        width: 10px;
-        position: absolute;
-        right: 20px;
-        top: 20px;
-      }
+    /*Styling when the add-todo button is hovered upon*/
+    #add_todo:hover {
+      background-color: #003459;
+      color: white;
+      font-weight: bold;
+      box-shadow: 5px 5px 5px 5px lightgray;
+    }
 
-      /*Styling for Your To-Dos hyperlink in the navbar*/
-      #to-dos
-      {
-        position: absolute;
-        top: 130px;
-        left: 22px;
-      }
 
-      /*Styling for the create todo button*/
-      #create
-      {
-        position: fixed;
-        top: 500px;
-        left: 710px;
-      }
+    /*Styling for the close icon in the todo popup*/
+    #cross-todo {
+      height: 10px;
+      width: 10px;
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
 
-      /*Styling for the sign out hyperlink*/
-      #sign_out
-      {
-        position: absolute;
-        top: 560px;
-        left: 40px;
-      }
+    /*Styling for Your To-Dos hyperlink in the navbar*/
+    #to-dos {
+      position: absolute;
+      top: 130px;
+      left: 22px;
+    }
 
-      /*Navbar styling*/
-      #navbar
-      {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        height: 900px;
-        width: 255px;
-        border-radius: 5px;
-        background-color: #003459;
-      }
+    /*Styling for the create todo button*/
+    #create {
+      position: fixed;
+      top: 500px;
+      left: 710px;
+    }
 
-       /*Styling for the greeting*/
-      h2
-      {
-        color: black;
-        font-family: "Roboto Serif", sans-serif;
-        font-weight: bold;
-        font-size: 30px;
-        position: absolute;
-        top: 10px;
-        left: 300px;
-      }
-       /*Styling for the home icon*/
-      #home_icon
-      {
-        height: 50px;
-        width: 50px;
-        position: absolute;
-        top: 14px;
-        left: 10px;
-      }
-       /*Styling for the mascot image*/
-      #side
-      {
-        height: 250px;
-        width: 250px;
-        position: absolute;
-        top: 44px;
-        left: 940px;
-      }
-       /*Styling for the description beneath the greeting*/
-      p
-      {
-        font-family: "Roboto Serif", sans-serif;
-        font-weight: bold;
-        position: absolute;
-        top: 120px;
-        left: 300px;
-      }
+    /*Styling for the sign out hyperlink*/
+    #sign_out {
+      position: absolute;
+      top: 560px;
+      left: 40px;
+    }
 
-       /*Styling for the popup*/
-      .popup
-      {
-        visibility: hidden;
-        text-align: center;
-        position: fixed;
-        background-color: blueviolet;
-        color: white;
-        border-radius: 20px;
-        left: 500px;
-        height: 520px;
-        width: 500px;
+    /*Navbar styling*/
+    #navbar {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      height: 900px;
+      width: 255px;
+      border-radius: 5px;
+      background-color: #003459;
+    }
 
-        box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
-      }
+    /*Styling for the greeting*/
+    h2 {
+      color: black;
+      font-family: "Roboto Serif", sans-serif;
+      font-weight: bold;
+      font-size: 30px;
+      position: absolute;
+      top: 10px;
+      left: 300px;
+    }
 
-       /*Styling for the image of Stylie in the popup*/
-      #stylie_hurray
-      {
-        position: fixed;
-        right: 480px;
-        top: 140px;
-        height: 250px;
-        width: 250px;
-      }
+    /*Styling for the home icon*/
+    #home_icon {
+      height: 50px;
+      width: 50px;
+      position: absolute;
+      top: 14px;
+      left: 10px;
+    }
 
-       /*Styling for the description in the popup*/
-      #des
-      {
-        position: fixed;
-        top: 380px;
-        right: 150px;
-      }
+    /*Styling for the mascot image*/
+    #side {
+      height: 250px;
+      width: 250px;
+      position: absolute;
+      top: 44px;
+      left: 940px;
+    }
 
-      /*Underline animation code*/
-      .underline-animation
-      {
-        position: relative;
-        display: inline-block;
-      }
+    /*Styling for the description beneath the greeting*/
+    p {
+      font-family: "Roboto Serif", sans-serif;
+      font-weight: bold;
+      position: absolute;
+      top: 120px;
+      left: 300px;
+    }
 
-      .underline-animation::after
-      {
-        content: '';
-        position: absolute;
-        left: 0px;
-        bottom: -10px;
-        width: 0;
-        height: 5px;
-        background-color: aqua;
-        transition: width 0.3s ease-in-out;
-      }
+    /*Styling for the popup*/
+    .popup {
+      visibility: hidden;
+      text-align: center;
+      position: fixed;
+      background-color: blueviolet;
+      color: white;
+      border-radius: 20px;
+      left: 500px;
+      height: 520px;
+      width: 500px;
 
-      .underline-animation:hover::after
-      {
-        width: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <!--Define the navbar-->
-    <div class="app">
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    /*Styling for the image of Stylie in the popup*/
+    #stylie_hurray {
+      position: fixed;
+      right: 480px;
+      top: 140px;
+      height: 250px;
+      width: 250px;
+    }
+
+    /*Styling for the description in the popup*/
+    #des {
+      position: fixed;
+      top: 380px;
+      right: 150px;
+    }
+
+    /*Underline animation code*/
+    .underline-animation {
+      position: relative;
+      display: inline-block;
+    }
+
+    .underline-animation::after {
+      content: '';
+      position: absolute;
+      left: 0px;
+      bottom: -10px;
+      width: 0;
+      height: 5px;
+      background-color: aqua;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .underline-animation:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <!--Define the navbar-->
+  <div class="app">
     <div id="navbar">
       <a class="underline-animation" id="to-dos" href="/todos">Your To-Do Lists</a>
       <a class="underline-animation" id="sign_out" href="/sign_out">Sign Out</a>
     </div>
 
-    <img onclick="home_page();" id="home_icon" src="static/home_icon.png">
-    
+    <img onclick="home_page();" id="home_icon" src="{{ url_for('static', filename='home_icon.png') }}">
+
     <!--The main content in the dashboard-->
     <h2>Hello, {{username}}</h2>
     <br>
     <br>
     <p>Welcome to DigiNotes! Create your notes and to-dos with ease!<br><br> Meet Stylie and Rob,
-    your buddies who will help you by giving useful tips!</p>
-    <img id="side" src="static/Stylie_and_RobDancing.png">
+      your buddies who will help you by giving useful tips!</p>
+    <img id="side" src="{{ url_for('static', filename='Stylie_and_RobDancing.png') }}">
+  </div>
+  <button onclick="appear_popup();" id="add_todo">Add To-Do List</button>
+
+  <!--The popup for Stylie (pencil)-->
+  <div class="popup" id="popup1">
+    <div class="popup-content">
+      <h1>Whoo-hoo! Stylie is happy!</h1>
+      <img id="cross-todo" src="{{ url_for('static', filename='cross.png') }}">
+      <img id="stylie_hurray" src="{{ url_for('static', filename='Stylie_Hurray.png') }}">
+
+      <br>
+      <br>
+      <p id="des">"Every time you create something here, you are literally <br> complimenting my job!"</p>
+      <br>
+      <br>
+
+      <a class="underline-animation" id="create" href="/todo">Create</a>
     </div>
-    <button onclick="appear_popup();" id="add_todo">Add To-Do List</button>
+  </div>
 
-    <!--The popup for Stylie (pencil)-->
-    <div class="popup" id="popup1">
-      <div class="popup-content">
-        <h1>Whoo-hoo! Stylie is happy!</h1>
-        <img id="cross-todo" src="static/cross.png">
-        <img id="stylie_hurray" src="static/Stylie_Hurray.png">
-
-        <br>
-        <br>
-        <p id="des">"Every time you create something here, you are literally <br> complimenting my job!"</p>
-        <br>
-        <br>
-          
-        <a class="underline-animation" id="create" href="/todo">Create</a>     
-      </div>
-    </div>
-
-    <script>
+  <script>
     // Define all the neccessary variables by using the getElementById method 
     let button = document.getElementById("home_icon");
     let note_button = document.getElementById("add_note");
@@ -247,27 +235,26 @@
 
     // Code block for the home icon, which will redirect to the /landing route when the home icon
     // is clicked
-    function home_page()
-    {
-       button.addEventListener('click', function (){
+    function home_page() {
+      button.addEventListener('click', function () {
         window.location.href = "/landing";
-    });
-  }
+      });
+    }
 
-  // This is for the close icon, which will close the popup when the close icon is clicked
-  cross_todo.addEventListener('click', function(){
-    popup.style.visibility = "hidden";
-  });
-
-  // This is for the Create To Do button, which will make the Stylie popup appear when the button
-  // is clicked
-  function appear_popup()
-  {
-    todo_button.addEventListener('click', function(){
-      sound.play();
-      popup.style.visibility = "visible";    
+    // This is for the close icon, which will close the popup when the close icon is clicked
+    cross_todo.addEventListener('click', function () {
+      popup.style.visibility = "hidden";
     });
-  }    
+
+    // This is for the Create To Do button, which will make the Stylie popup appear when the button
+    // is clicked
+    function appear_popup() {
+      todo_button.addEventListener('click', function () {
+        sound.play();
+        popup.style.visibility = "visible";
+      });
+    }    
   </script>
-  </body>  
+</body>
+
 </html>

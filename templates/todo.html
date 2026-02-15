@@ -1,169 +1,163 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>DigiNotes: Create a To-Do List</title>
 
-    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<head>
+  <title>DigiNotes: Create a To-Do List</title>
 
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
-    <style>
-      /*Back hyperlink styling*/
-      a
-      {
-        font-family: "Inter", sans-serif;
-        font-size: 20px;
-        color: white;
-        font-weight: bold;
-        position: absolute;
-        top: 7px;
-        left: 100px;
-        text-decoration: none;
-      }
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    /*Back hyperlink styling*/
+    a {
+      font-family: "Inter", sans-serif;
+      font-size: 20px;
+      color: white;
+      font-weight: bold;
+      position: absolute;
+      top: 7px;
+      left: 100px;
+      text-decoration: none;
+    }
 
 
-      /*Icon styling*/
-      img
-      {
-        position: fixed;
-        top: 4px;
-        left: 60px;
-        height: 30px;
-        width: 30px;
-      }
+    /*Icon styling*/
+    img {
+      position: fixed;
+      top: 4px;
+      left: 60px;
+      height: 30px;
+      width: 30px;
+    }
 
-      /*Text fields labels*/
-      label
-      {
-        font-weight: bold;
-        font-family: "Roberto-Serif", sans-serif;
-        font-size: 20px;
-        color: #003459;
-      }
+    /*Text fields labels*/
+    label {
+      font-weight: bold;
+      font-family: "Roberto-Serif", sans-serif;
+      font-size: 20px;
+      color: #003459;
+    }
 
-      /*Title field styling*/
-      #title
-      {
-        resize: none;
-        font-family: "Roberto-Serif", sans-serif;
-        font-size: 20px;
-        border-color: blueviolet;    
-        color: blueviolet;
-        font-weight: bold;   
-        font-size: 20px
-      }
+    /*Title field styling*/
+    #title {
+      resize: none;
+      font-family: "Roberto-Serif", sans-serif;
+      font-size: 20px;
+      border-color: blueviolet;
+      color: blueviolet;
+      font-weight: bold;
+      font-size: 20px
+    }
 
-      /*Placeholders for both the fields*/
-      #title::placeholder, #text::placeholder
-      {
-        color: blueviolet;
-      }
+    /*Placeholders for both the fields*/
+    #title::placeholder,
+    #text::placeholder {
+      color: blueviolet;
+    }
 
-      /*Text field styling, navbar styling, styling when text area is hovered*/
-      #text
-      {
-        font-family: "Roberto-Serif", sans-serif;
-        font-size: 15px;
-        border-color: blueviolet;
-        color: blueviolet;
-        font-weight: bold;
-        resize: none;
-      }
+    /*Text field styling, navbar styling, styling when text area is hovered*/
+    #text {
+      font-family: "Roberto-Serif", sans-serif;
+      font-size: 15px;
+      border-color: blueviolet;
+      color: blueviolet;
+      font-weight: bold;
+      resize: none;
+    }
 
-      #navbar
-      {
-        height: 40px;
-        width: 1364px;
-        background-color: #003459;
-        position: fixed;
-        top: 0px;
-        left: 0px;        
-      }
-      
-      textarea:hover
-      {
-        box-shadow: 1px 1px 1px 1px blueviolet;
-      }
+    #navbar {
+      height: 40px;
+      width: 1364px;
+      background-color: #003459;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+    }
 
-      /*p tag styling, button styling, and button hover styling*/
-      p
-      {
-        font-family: "Inter", sans-serif;
-        color: red;
-        font-weight: bold;
-        font-size: 20px;
-      }
+    textarea:hover {
+      box-shadow: 1px 1px 1px 1px blueviolet;
+    }
 
-      button
-      {
-        height: 40px;
-        width: 150px;
-        position: absolute;
-        top: 440px;
-        left: 650px;
-        background-color: white;
-        color: blueviolet;
-        font-weight: bold;
-        font-size: 16px;
-        border-width: 1px;
-      }
+    /*p tag styling, button styling, and button hover styling*/
+    p {
+      font-family: "Inter", sans-serif;
+      color: red;
+      font-weight: bold;
+      font-size: 20px;
+    }
 
-      button:hover
-      {
-        background-color: blueviolet;
-        color: white;
-      }
-    </style>
+    button {
+      height: 40px;
+      width: 150px;
+      position: absolute;
+      top: 440px;
+      left: 650px;
+      background-color: white;
+      color: blueviolet;
+      font-weight: bold;
+      font-size: 16px;
+      border-width: 1px;
+    }
 
-  </head>
-  <body>
-    <div id="navbar">
-      <a href="/dashboard">Back</a>
-       <img onclick="change_page();" id="back_icon" src="static/back_icon.png">        
-    </div>
+    button:hover {
+      background-color: blueviolet;
+      color: white;
+    }
+  </style>
 
+</head>
+
+<body>
+  <div id="navbar">
+    <a href="/dashboard">Back</a>
+    <img onclick="change_page();" id="back_icon" src="{{ url_for('static', filename='back_icon.png') }}">
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <form action="/todo" method="post">
+    <label style="font-weight: bold;" for="title">Title:</label>
+    <br>
+    <textarea id="title" name="title" rows="1.5" cols="80" placeholder="Enter the title of your to-do"></textarea>
+    <br>
+    <p>{{message1}}</p>
     <br>
     <br>
+    <label style="font-weight: bold;" for="text">Note:</label>
+    <br>
+    <textarea id="text" name="text" rows="8" cols="120" placeholder="Enter a note"></textarea>
+    <p>{{message2}}</p>
     <br>
     <br>
-    <form action="/todo" method="post">
-      <label style="font-weight: bold;" for="title">Title:</label>
-      <br>
-      <textarea id="title" name="title" rows="1.5" cols="80" placeholder="Enter the title of your to-do"></textarea>
-      <br>
-      <p>{{message1}}</p>
-      <br>
-      <br>
-      <label style="font-weight: bold;" for="text">Note:</label>
-      <br>
-      <textarea id="text" name="text" rows="8" cols="120" placeholder="Enter a note"></textarea>
-      <p>{{message2}}</p>
-      <br>
-      <br>
-      <button id="submit_content" type="submit">Create To-Do List</button>
-    
-    
-    
-    </form>
-   
-    <script>
-      // Variables
-      const image = document.getElementById('back_icon');
-      const submitted = document.getElementById('submit_content');
+    <button id="submit_content" type="submit">Create To-Do List</button>
 
-      // Submit button should lead to the todos route
-      submitted.addEventListener('click', function (){
-        window.location.href="/todos";
+
+
+  </form>
+
+  <script>
+    // Variables
+    const image = document.getElementById('back_icon');
+    const submitted = document.getElementById('submit_content');
+
+    // Submit button should lead to the todos route
+    submitted.addEventListener('click', function () {
+      window.location.href = "/todos";
+    });
+
+    // When the arrow icon is clicked it should lead to the dashboard
+    function change_page() {
+      image.addEventListener('click', function () {
+        window.location.href = "/dashboard";
       });
+    }
+  </script>
+</body>
 
-      // When the arrow icon is clicked it should lead to the dashboard
-      function change_page()
-      {
-        image.addEventListener('click', function (){
-          window.location.href="/dashboard";
-        });
-      }
-    </script>
-  </body>
 </html>

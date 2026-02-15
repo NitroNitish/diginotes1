@@ -1,103 +1,96 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>DigiNotes: Create an Account</title>
 
-    <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+<head>
+  <title>DigiNotes: Create an Account</title>
 
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap" rel="stylesheet">
-    <style>
-      body
-      {
-        background-color: blueviolet;
-        text-align: center;
-      }
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-      button
-      {
-        height: 30px;
-        width: 100px;
-        font-size: 15px;
-        font-weight: bold;
-        font-family: "Roboto Serif", sans-serif;
-        border: 2px solid black;
-        border-radius: 5px;
-        background-color: #aa7bc3;
-      }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      background-color: blueviolet;
+      text-align: center;
+    }
 
-      button:hover
-      {
-        box-shadow: 3px 3px 3px 3px blueviolet;
-        color: #aa7bc3;
-        background-color: black;
-        font-weight: bold;
-      }
+    button {
+      height: 30px;
+      width: 100px;
+      font-size: 15px;
+      font-weight: bold;
+      font-family: "Roboto Serif", sans-serif;
+      border: 2px solid black;
+      border-radius: 5px;
+      background-color: #aa7bc3;
+    }
 
-      div
-      {
-        font-family: "Roboto Serif", sans-serif;
-        position: absolute;
-        left: 440px;
-        background-color: #e0aaff;
-        height: 450px;
-        width: 550px;
-        border-radius: 10px;
-        box-shadow: 5px 5px 5px 5px #332f2f;
-      }
+    button:hover {
+      box-shadow: 3px 3px 3px 3px blueviolet;
+      color: #aa7bc3;
+      background-color: black;
+      font-weight: bold;
+    }
 
-      h3
-      {
-        font-size: 30px;
-      }
+    div {
+      font-family: "Roboto Serif", sans-serif;
+      position: absolute;
+      left: 440px;
+      background-color: #e0aaff;
+      height: 450px;
+      width: 550px;
+      border-radius: 10px;
+      box-shadow: 5px 5px 5px 5px #332f2f;
+    }
 
-      img
-      {
-        height: 40px;
-        width: 40px;
-        position: absolute;
-        top: 14px;
-        left: 30px;
-        border: 2px solid black;
-      }
+    h3 {
+      font-size: 30px;
+    }
 
-      img:hover
-      {
-        cursor: pointer;
-      }
+    img {
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      top: 14px;
+      left: 30px;
+      border: 2px solid black;
+    }
 
-      input
-      {
-        font-size: 15px;
-        font-family: "Roboto Serif", sans-serif;
-        height: 30px;
-        width: 200px;  
-      }
+    img:hover {
+      cursor: pointer;
+    }
 
-      input:hover
-      {
-        box-shadow: 3px 3px 3px 3px blueviolet;
-      }
+    input {
+      font-size: 15px;
+      font-family: "Roboto Serif", sans-serif;
+      height: 30px;
+      width: 200px;
+    }
 
-      p
-      {
-        font-weight: bold;
-        color: red;
-        font-family: "Roboto Serif", sans-serif;
-      }
-    </style>
-    </head>
+    input:hover {
+      box-shadow: 3px 3px 3px 3px blueviolet;
+    }
 
-   <body>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div>
+    p {
+      font-weight: bold;
+      color: red;
+      font-family: "Roboto Serif", sans-serif;
+    }
+  </style>
+</head>
 
-      <form action="/account" method="post">
+<body>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <div>
+
+    <form action="/account" method="post">
       <h3>Sign In</h3>
       <input autocomplete="off" autofocus name="username" placeholder="Enter your username">
       <p>{{message1}}</p>
@@ -106,21 +99,21 @@
       <p>{{message2}}</p>
       <br>
       <button type="submit">Submit</button>
-    </form>  
-    </div>
+    </form>
+  </div>
 
-    <img onclick="home_page();" id="home_icon" src="static/home_icon.png">
-    
-    
-    <script>
-      let home = document.getElementById('home_icon');
+  <img onclick="home_page();" id="home_icon" src="{{ url_for('static', filename='home_icon.png') }}">
 
-      function home_page()
-      {
-         home.addEventListener('click', function (){
-         window.location.href="/landing";
+
+  <script>
+    let home = document.getElementById('home_icon');
+
+    function home_page() {
+      home.addEventListener('click', function () {
+        window.location.href = "/landing";
       });
-      }
-    </script>
-   </body>
+    }
+  </script>
+</body>
+
 </html>
