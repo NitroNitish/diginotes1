@@ -1,7 +1,7 @@
 import os
-import sqlite3
 from flask import Flask, render_template, request, redirect, session
 from datetime import timedelta
+from supabase import create_client, Client
 
 # Set up the app with Flask function and secret key, and also specify the session lifetime
 
@@ -9,30 +9,10 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "DIGINOTES_12345")
 app.permanent_session_lifetime = timedelta(days=12)
 
-# Database path — use /tmp on Vercel (serverless writable directory)
-DB_PATH = "/tmp/diginotes.db" if os.environ.get("VERCEL") else "diginotes.db"
-
-
-def get_db():
-    """Get a database connection, creating tables if they don't exist."""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL
-        )
-    """)
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS notes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL UNIQUE,
-            note TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    return conn
+# Supabase connection
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "")
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 # Define a home route (/) and check whether user's username is in session and if it is redirect to
@@ -63,11 +43,11 @@ def account():
         session.permanent = True
         session["username"] = username
 
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
-        conn.commit()
-        conn.close()
+        # Insert user into Supabase
+        supabase.table("users").insert({
+            "username": username,
+            "password": password
+        }).execute()
 
     return redirect("/")
 
@@ -86,11 +66,9 @@ def dashboard():
 
 @app.route("/sign_out")
 def sign_out():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM users WHERE username = ?", (session.get("username", ""),))
-    conn.commit()
-    conn.close()
+    username = session.get("username", "")
+    if username:
+        supabase.table("users").delete().eq("username", username).execute()
     session.clear()
     return redirect("/")
 
@@ -117,14 +95,13 @@ def todo():
         elif not note:
             return render_template("todo.html", message2="What task do you want to finish? Not none, right?")
         else:
-            conn = get_db()
-            cursor = conn.cursor()
-            try:
-                cursor.execute("INSERT INTO notes (title, note) VALUES (?, ?)", (title, note))
-            except sqlite3.IntegrityError:
-                pass
-            conn.commit()
-            conn.close()
+            # Check if title already exists
+            existing = supabase.table("notes").select("id").eq("title", title).execute()
+            if not existing.data:
+                supabase.table("notes").insert({
+                    "title": title,
+                    "note": note
+                }).execute()
 
     return redirect("/todos")
 
@@ -133,11 +110,9 @@ def todo():
 
 @app.route("/todos")
 def todos():
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM notes;")
-    rows = cursor.fetchall()
-    conn.close()
+    result = supabase.table("notes").select("*").order("id").execute()
+    # Convert Supabase rows (dicts) to tuples (id, title, note) for template compatibility
+    rows = [(row["id"], row["title"], row["note"]) for row in result.data]
     return render_template("todos.html", todos=rows)
 
 
@@ -146,11 +121,8 @@ def todos():
 @app.route("/delete", methods=["POST"])
 def delete():
     delete_id = request.form.get("final_delete")
-    conn = get_db()
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM notes WHERE id = ?", (delete_id,))
-    conn.commit()
-    conn.close()
+    if delete_id:
+        supabase.table("notes").delete().eq("id", int(delete_id)).execute()
     return redirect("/todos")
 
 
@@ -166,10 +138,11 @@ def update():
         updatedTitle = request.form.get("updated_title")
         updatedText = request.form.get("updated_text")
 
-        conn = get_db()
-        cursor = conn.cursor()
-        cursor.execute("UPDATE notes SET title = ?, note = ? WHERE id = ?",
-                        (updatedTitle, updatedText, session["note_id"]))
-        conn.commit()
-        conn.close()
+        note_id = session.get("note_id")
+        if note_id:
+            supabase.table("notes").update({
+                "title": updatedTitle,
+                "note": updatedText
+            }).eq("id", int(note_id)).execute()
+
     return redirect('/todos')
