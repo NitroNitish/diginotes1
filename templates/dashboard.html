@@ -3,257 +3,330 @@
 
 <head>
   <title>DigiNotes: Dashboard</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Serif:ital,opsz,wght@0,8..144,100..900;1,8..144,100..900&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Serif:wght@400;700;900&display=swap"
     rel="stylesheet">
   <style>
-    /*Base styling for the a tags*/
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      min-height: 100vh;
+      display: flex;
+    }
+
     a {
       font-family: "Inter", sans-serif;
       color: white;
       font-weight: bold;
-      font-size: 20px;
+      font-size: 18px;
       text-decoration: none;
     }
 
-    /*Body styling*/
-    body {
-      padding-bottom: 50px;
-    }
-
-    /*Add todo button styling*/
-    #add_todo {
-      height: 40px;
-      width: 150px;
-      position: absolute;
-      top: 350px;
-      left: 700px;
-      background-color: white;
-      color: #003459;
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-    /*Styling when the add-todo button is hovered upon*/
-    #add_todo:hover {
-      background-color: #003459;
-      color: white;
-      font-weight: bold;
-      box-shadow: 5px 5px 5px 5px lightgray;
-    }
-
-
-    /*Styling for the close icon in the todo popup*/
-    #cross-todo {
-      height: 10px;
-      width: 10px;
-      position: absolute;
-      right: 20px;
-      top: 20px;
-    }
-
-    /*Styling for Your To-Dos hyperlink in the navbar*/
-    #to-dos {
-      position: absolute;
-      top: 130px;
-      left: 22px;
-    }
-
-    /*Styling for the create todo button*/
-    #create {
-      position: fixed;
-      top: 500px;
-      left: 710px;
-    }
-
-    /*Styling for the sign out hyperlink*/
-    #sign_out {
-      position: absolute;
-      top: 560px;
-      left: 40px;
-    }
-
-    /*Navbar styling*/
+    /* Sidebar */
     #navbar {
-      position: absolute;
-      left: 0px;
-      top: 0px;
-      height: 900px;
-      width: 255px;
-      border-radius: 5px;
+      width: 220px;
+      min-height: 100vh;
       background-color: #003459;
+      padding: 20px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      flex-shrink: 0;
     }
 
-    /*Styling for the greeting*/
-    h2 {
-      color: black;
-      font-family: "Roboto Serif", sans-serif;
-      font-weight: bold;
-      font-size: 30px;
-      position: absolute;
-      top: 10px;
-      left: 300px;
-    }
-
-    /*Styling for the home icon*/
-    #home_icon {
-      height: 50px;
-      width: 50px;
-      position: absolute;
-      top: 14px;
-      left: 10px;
-    }
-
-    /*Styling for the mascot image*/
-    #side {
-      height: 250px;
-      width: 250px;
-      position: absolute;
-      top: 44px;
-      left: 940px;
-    }
-
-    /*Styling for the description beneath the greeting*/
-    p {
-      font-family: "Roboto Serif", sans-serif;
-      font-weight: bold;
-      position: absolute;
-      top: 120px;
-      left: 300px;
-    }
-
-    /*Styling for the popup*/
-    .popup {
-      visibility: hidden;
-      text-align: center;
-      position: fixed;
-      background-color: blueviolet;
-      color: white;
-      border-radius: 20px;
-      left: 500px;
-      height: 520px;
-      width: 500px;
-
-      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
-    }
-
-    /*Styling for the image of Stylie in the popup*/
-    #stylie_hurray {
-      position: fixed;
-      right: 480px;
-      top: 140px;
-      height: 250px;
-      width: 250px;
-    }
-
-    /*Styling for the description in the popup*/
-    #des {
-      position: fixed;
-      top: 380px;
-      right: 150px;
-    }
-
-    /*Underline animation code*/
-    .underline-animation {
+    .nav-item {
       position: relative;
       display: inline-block;
     }
 
-    .underline-animation::after {
+    .nav-item::after {
       content: '';
       position: absolute;
-      left: 0px;
-      bottom: -10px;
+      left: 0;
+      bottom: -5px;
       width: 0;
-      height: 5px;
+      height: 3px;
       background-color: aqua;
       transition: width 0.3s ease-in-out;
     }
 
-    .underline-animation:hover::after {
+    .nav-item:hover::after {
       width: 100%;
+    }
+
+    .nav-spacer {
+      flex: 1;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 30px;
+      position: relative;
+    }
+
+    .home-icon {
+      height: 40px;
+      width: 40px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      color: black;
+      font-family: "Roboto Serif", sans-serif;
+      font-weight: bold;
+      font-size: clamp(22px, 4vw, 30px);
+      margin-bottom: 10px;
+    }
+
+    .welcome-text {
+      font-family: "Roboto Serif", sans-serif;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 550px;
+    }
+
+    .content-area {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    #side {
+      max-width: 250px;
+      height: auto;
+    }
+
+    #add_todo {
+      height: 40px;
+      width: 160px;
+      background-color: white;
+      color: #003459;
+      font-weight: bold;
+      font-size: 15px;
+      border: 2px solid #003459;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 25px;
+    }
+
+    #add_todo:hover {
+      background-color: #003459;
+      color: white;
+      box-shadow: 5px 5px 5px 5px lightgray;
+    }
+
+    /* Popup */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup.active {
+      display: flex;
+    }
+
+    .popup-content {
+      background-color: blueviolet;
+      color: white;
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 450px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .popup-content h1 {
+      font-size: clamp(18px, 4vw, 24px);
+      margin-bottom: 15px;
+    }
+
+    #cross-todo {
+      height: 15px;
+      width: 15px;
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      cursor: pointer;
+    }
+
+    #stylie_hurray {
+      max-width: 200px;
+      height: auto;
+      margin: 10px 0;
+    }
+
+    .popup-content p {
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
+    .popup-content .create-link {
+      display: inline-block;
+      margin-top: 15px;
+      font-size: 18px;
+      position: relative;
+    }
+
+    .popup-content .create-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+      width: 0;
+      height: 3px;
+      background-color: aqua;
+      transition: width 0.3s ease-in-out;
+    }
+
+    .popup-content .create-link:hover::after {
+      width: 100%;
+    }
+
+    /* Mobile hamburger */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 200;
+      background: #003459;
+      color: white;
+      border: none;
+      font-size: 24px;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      #navbar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        z-index: 150;
+        transition: left 0.3s;
+        width: 220px;
+      }
+
+      #navbar.open {
+        left: 0;
+      }
+
+      .main-content {
+        padding: 60px 20px 20px;
+      }
+
+      #side {
+        max-width: 180px;
+      }
+
+      .content-area {
+        justify-content: center;
+        text-align: center;
+      }
+
+      .welcome-text {
+        text-align: left;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!--Define the navbar-->
-  <div class="app">
-    <div id="navbar">
-      <a class="underline-animation" id="to-dos" href="/todos">Your To-Do Lists</a>
-      <a class="underline-animation" id="sign_out" href="/sign_out">Sign Out</a>
-    </div>
+  <button class="hamburger" onclick="toggleNav()">☰</button>
 
-    <img onclick="home_page();" id="home_icon" src="{{ url_for('static', filename='home_icon.png') }}">
-
-    <!--The main content in the dashboard-->
-    <h2>Hello, {{username}}</h2>
-    <br>
-    <br>
-    <p>Welcome to DigiNotes! Create your notes and to-dos with ease!<br><br> Meet Stylie and Rob,
-      your buddies who will help you by giving useful tips!</p>
-    <img id="side" src="{{ url_for('static', filename='Stylie_and_RobDancing.png') }}">
+  <div id="navbar">
+    <a class="nav-item" href="/todos">Your To-Do Lists</a>
+    <div class="nav-spacer"></div>
+    <a class="nav-item" href="/sign_out">Sign Out</a>
   </div>
-  <button onclick="appear_popup();" id="add_todo">Add To-Do List</button>
 
-  <!--The popup for Stylie (pencil)-->
+  <div class="main-content">
+    <img onclick="home_page();" class="home-icon" src="{{ url_for('static', filename='home_icon.png') }}">
+    <h2>Hello, {{username}}</h2>
+
+    <div class="content-area">
+      <div>
+        <p class="welcome-text">Welcome to DigiNotes! Create your notes and to-dos with ease!<br><br>
+          Meet Stylie and Rob, your buddies who will help you by giving useful tips!</p>
+        <button onclick="appear_popup();" id="add_todo">Add To-Do List</button>
+      </div>
+      <img id="side" src="{{ url_for('static', filename='Stylie_and_RobDancing.png') }}">
+    </div>
+  </div>
+
   <div class="popup" id="popup1">
     <div class="popup-content">
       <h1>Whoo-hoo! Stylie is happy!</h1>
-      <img id="cross-todo" src="{{ url_for('static', filename='cross.png') }}">
+      <img id="cross-todo" src="{{ url_for('static', filename='cross.png') }}" onclick="close_popup();">
       <img id="stylie_hurray" src="{{ url_for('static', filename='Stylie_Hurray.png') }}">
-
       <br>
+      <p>"Every time you create something here, you are literally complimenting my job!"</p>
       <br>
-      <p id="des">"Every time you create something here, you are literally <br> complimenting my job!"</p>
-      <br>
-      <br>
-
-      <a class="underline-animation" id="create" href="/todo">Create</a>
+      <a class="create-link" href="/todo">Create</a>
     </div>
   </div>
 
   <script>
-    // Define all the neccessary variables by using the getElementById method 
-    let button = document.getElementById("home_icon");
-    let note_button = document.getElementById("add_note");
-    let todo_button = document.getElementById("add_todo");
-
-    let popup = document.getElementById('popup1');
-    let popup2 = document.getElementById('popup2');
-
-    let cross_todo = document.getElementById('cross-todo');
-    let cross_note = document.getElementById('cross-note');
-
-    // Define a sound variable to store the arcade music to be played when Stylie's popup is opened
     let sound = new Audio("{{url_for('static', filename='audio/arcade.mp3')}}");
 
-    // Code block for the home icon, which will redirect to the /landing route when the home icon
-    // is clicked
     function home_page() {
-      button.addEventListener('click', function () {
-        window.location.href = "/landing";
-      });
+      window.location.href = "/landing";
     }
 
-    // This is for the close icon, which will close the popup when the close icon is clicked
-    cross_todo.addEventListener('click', function () {
-      popup.style.visibility = "hidden";
-    });
-
-    // This is for the Create To Do button, which will make the Stylie popup appear when the button
-    // is clicked
     function appear_popup() {
-      todo_button.addEventListener('click', function () {
-        sound.play();
-        popup.style.visibility = "visible";
-      });
-    }    
+      sound.play();
+      document.getElementById('popup1').classList.add('active');
+    }
+
+    function close_popup() {
+      document.getElementById('popup1').classList.remove('active');
+    }
+
+    function toggleNav() {
+      document.getElementById('navbar').classList.toggle('open');
+    }
+
+    // Close nav when clicking outside on mobile
+    document.addEventListener('click', function (e) {
+      const nav = document.getElementById('navbar');
+      const hamburger = document.querySelector('.hamburger');
+      if (nav.classList.contains('open') && !nav.contains(e.target) && !hamburger.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
   </script>
 </body>
 
